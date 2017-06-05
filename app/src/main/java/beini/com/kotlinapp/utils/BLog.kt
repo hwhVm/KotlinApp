@@ -11,8 +11,7 @@ import android.util.Log
 class BLog {
     companion object {
         val debug = true
-        val tag = "com.beini"
-        fun d(content: String) {
+        fun d(content: String, tag: String = "com.beini") {
             if (debug) {
                 Log.d(tag, content)
             }
