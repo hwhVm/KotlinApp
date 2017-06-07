@@ -1,15 +1,19 @@
 package beini.com.kotlinapp.ui.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
-import beini.com.kotlinapp.ApiClient
 import beini.com.kotlinapp.R
-import beini.com.kotlinapp.bean.WeatherinfoModel
-import beini.com.kotlinapp.callback.ApiCallback
-import beini.com.kotlinapp.utils.BLog
+import beini.com.kotlinapp.constants.NetConstants
+import beini.com.kotlinapp.net.RxNetUtil
+import beini.com.kotlinapp.net.RxSchedulers
+import beini.com.kotlinapp.net.request.LoginRequest
+import beini.com.kotlinapp.net.response.BaseResponseJson
 import beini.com.kotlinapp.utils.ToastUtil
 import kotlinx.android.synthetic.main.activity_main.*
+import org.reactivestreams.Subscriber
+import org.reactivestreams.Subscription
 
 
 class LoginActivity : BaseActivity(), View.OnClickListener {
@@ -27,35 +31,49 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
     }
 
     fun login() {
-        val account = et_account.text.trim()
-        val passowrd = et_password.text.trim()
+        val account = et_account.text.toString().trim()
+        val password = et_password.text.toString().trim()
 
         if (TextUtils.isEmpty(account)) {
             ToastUtil.showToast("account error")
             return
         }
-        if (TextUtils.isEmpty(passowrd)) {
+        if (TextUtils.isEmpty(password)) {
             ToastUtil.showToast("passowrd error")
             return
         }
-        BLog.d("account=$account   passowrd=$passowrd")
+        val request = LoginRequest(account, password, NetConstants.COMMAND_LOGIN)
+        RxNetUtil.rxLoginBack(request)
+                .compose(RxSchedulers.composeFloable())
+                .subscribe(object : Subscriber<BaseResponseJson> {
+                    override fun onSubscribe(s: Subscription) {
+                        s.request(java.lang.Long.MAX_VALUE)
+                    }
+
+                    override fun onNext(baseResponseJson: BaseResponseJson?) {
+                        if (baseResponseJson != null && baseResponseJson.ReturnCode == 0) {
+                            val homeIntent: Intent = Intent()
+                            homeIntent.setClass(this@LoginActivity, HomeActivity::class.java)
+                            startActivity(homeIntent)
+                        } else {
+                            ToastUtil.showToast("login fail")
+                        }
+                    }
+
+                    override fun onError(t: Throwable) {
+
+                    }
+
+                    override fun onComplete() {
+
+                    }
+
+                })
+
 
     }
 
-    fun getWeatherData() {
-        //object为对象表达式
-        addSubscription(ApiClient.retrofit().loadData("101190201"), object : ApiCallback<WeatherinfoModel>() {
-            override fun onSuccess(model: WeatherinfoModel) {
-                BLog.d("city=" + model.city + ",cityid=" + model.cityid)//输出“city=无锡,cityid=101190201”
-            }
 
-            override fun onFailure(msg: String?) {
-                BLog.d("onFailure=" + msg)
-            }
-
-            override fun onFinish() {
-                BLog.d("onFinish")
-            }
-        })
-    }
 }
+
+

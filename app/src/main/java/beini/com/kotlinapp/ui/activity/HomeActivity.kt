@@ -4,14 +4,12 @@ import android.app.Activity
 import android.os.Bundle
 import beini.com.kotlinapp.R
 
-open class BaseActivity : Activity() {
+class HomeActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_base)
+        setContentView(R.layout.activity_home)
+
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-    }
 }
