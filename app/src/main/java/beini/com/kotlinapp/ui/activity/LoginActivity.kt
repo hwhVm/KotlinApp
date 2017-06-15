@@ -55,6 +55,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                             val homeIntent: Intent = Intent()
                             homeIntent.setClass(this@LoginActivity, HomeActivity::class.java)
                             startActivity(homeIntent)
+                            setCache(baseResponseJson)
                         } else {
                             ToastUtil.showToast("login fail")
                         }
@@ -73,6 +74,9 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
 
     }
 
+    fun setCache(baseResponseJson: BaseResponseJson) {
+
+    }
 
 }
 

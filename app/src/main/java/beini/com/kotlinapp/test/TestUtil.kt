@@ -46,4 +46,12 @@ class TestUtil {
         val requestUrl = URL(imageUrl)
         output.writeBytes(requestUrl.readBytes())
     }
+
+    @Test
+    fun testFun() {
+       println( returnSum(1, 2))
+    }
+
+    fun returnSum(a: Int, b: Int) = (a + b)
+
 }
