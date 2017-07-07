@@ -26,8 +26,14 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
 
     override fun onClick(v: View?) {
         when (v) {
-            btn_login -> login()
+            btn_login -> loginDirect()
         }
+    }
+
+    fun loginDirect() {
+        val homeIntent: Intent = Intent()
+        homeIntent.setClass(this@LoginActivity, HomeActivity::class.java)
+        startActivity(homeIntent)
     }
 
     fun login() {
