@@ -2,6 +2,7 @@ package beini.com.kotlinapp.net
 
 import android.os.Environment
 import beini.com.kotlinapp.constants.NetConstants
+import beini.com.kotlinapp.net.request.GetArticleRequest
 import beini.com.kotlinapp.net.request.LoginRequest
 import beini.com.kotlinapp.net.response.BaseResponseJson
 import beini.com.kotlinapp.utils.BLog
@@ -80,4 +81,7 @@ object RxNetUtil {
         return rxServer!!.rxSendRequestBack(loginRequest.url, loginRequest)
     }
 
+    fun rxGetArticles(getArticleRequest: GetArticleRequest): Flowable<BaseResponseJson> {
+        return rxServer!!.rxSendRequestBack("getArticleList", getArticleRequest)
+    }
 }

@@ -30,7 +30,7 @@ class HomeActivity : Activity() {
     }
 
     fun initViewAndData() {
-        val mDataList = listOf("Java", "Android", "Kotlin", "C++", "HTML")
+        val mDataList = listOf("Java", "Android", "Kotlin")
 
         fragments.add(OneFragment())
         fragments.add(TwoFragment())
